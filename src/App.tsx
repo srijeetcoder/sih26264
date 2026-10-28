@@ -19,7 +19,7 @@ import { LodgeComplaintModal } from './components/LodgeComplaintModal';
 function AppContent() {
   const { currentUser } = useApp();
   const [currentView, setCurrentView] = useState<ViewName>('overview');
-  const [selectedCaseId, setSelectedCaseId] = useState<string>('CASE-2024-001');
+  const [selectedCaseId, setSelectedCaseId] = useState<string>('CASE-2026-001');
   const [selectedInstitutionId, setSelectedInstitutionId] = useState<string>('INST-0042');
   const [isLodgeModalOpen, setIsLodgeModalOpen] = useState(false);
 

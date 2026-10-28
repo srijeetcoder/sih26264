@@ -44,21 +44,21 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const [notifications, setNotifications] = useState<NotificationItem[]>([
     {
       id: 'notif-1',
-      title: 'Potential Overlap Detected',
-      desc: 'Ramanujan Institute has cross-bureau cases across Approval and Infrastructure bureaus.',
+      title: 'Potential Overlapping Cases – Coordination Required',
+      desc: 'Ramanujan Institute of Technology has cross-bureau cases across Approval and Infrastructure bureaus for AY 2026-27.',
       time: '10m ago',
       read: false,
       type: 'overlap',
-      linkCaseId: 'CASE-2024-001',
+      linkCaseId: 'CASE-2026-001',
     },
     {
       id: 'notif-2',
       title: 'Urgent SLA Escalation',
-      desc: 'CASE-2024-005 (Faculty Shortage) is overdue by 2 days.',
+      desc: 'CASE-2026-005 (Faculty Shortage) is overdue by 2 days.',
       time: '1h ago',
       read: false,
       type: 'alert',
-      linkCaseId: 'CASE-2024-005',
+      linkCaseId: 'CASE-2026-005',
     },
   ]);
 
@@ -144,9 +144,8 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   // Live Complaint Addition
   const addCase = useCallback(
     (caseInput: Omit<Case, 'id' | 'auditHistory'>): Case => {
-      // Generate clean sequential Case ID
-      const num = cases.length + 1;
-      const id = `CASE-2024-${String(num).padStart(3, '0')}`;
+      // Generate collision-safe unique Case ID using timestamp
+      const id = `CASE-2026-${Date.now().toString().slice(-6)}`;
       const nowIso = new Date().toISOString();
 
       const initialAudit: AuditEvent = {
@@ -163,61 +162,64 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         auditHistory: [initialAudit],
       };
 
-      setCases(prev => [createdCase, ...prev]);
+      // Use functional update so we always see the latest cases list
+      setCases(prev => {
+        // Scan ALL existing (non-disposed) cases for overlaps with the new case
+        const nonDisposed = prev.filter(c => c.status !== 'disposed');
 
-      // Scan existing cases for overlaps with the new case
-      const nonDisposed = cases.filter(c => c.status !== 'disposed');
-      let foundOverlaps = 0;
+        for (const existing of nonDisposed) {
+          if (existing.bureau === createdCase.bureau) continue; // cross-bureau only
 
-      for (const existing of nonDisposed) {
-        if (existing.bureau === createdCase.bureau) continue; // cross-bureau only
+          // Layer 1: Exact Institution ID match → "Potential Overlapping Cases"
+          if (existing.institutionId === createdCase.institutionId) {
+            // Queue overlap asynchronously so state batching works
+            setTimeout(() => {
+              addOverlap({
+                caseAId: createdCase.id,
+                caseBId: existing.id,
+                matchMethod: 'exact-id',
+                evidence: `⚠️ Potential Overlapping Cases – Coordination Required\n\n${createdCase.institutionName} (${createdCase.institutionId}) already has an active case in the ${existing.bureau}. This new complaint is received by the ${createdCase.bureau}. Both bureaus must coordinate to avoid conflicting or parallel actions.\n\nMulti-bureau scrutiny recommended.`,
+                reviewDecision: 'pending',
+              });
+            }, 0);
+            continue;
+          }
 
-        // Layer 1: Exact Institution ID match
-        if (existing.institutionId === createdCase.institutionId) {
-          addOverlap({
-            caseAId: createdCase.id,
-            caseBId: existing.id,
-            matchMethod: 'exact-id',
-            evidence: `New case shares institution ID (${createdCase.institutionId}) with ${existing.id} in ${existing.bureau}. Multi-bureau scrutiny recommended.`,
-            reviewDecision: 'pending',
-          });
-          foundOverlaps++;
-          continue;
+          // Layer 2: Keyword / TF-IDF text similarity
+          const sim = computeTextSimilarity(createdCase.description, existing.description);
+          if (sim >= 0.25) {
+            setTimeout(() => {
+              addOverlap({
+                caseAId: createdCase.id,
+                caseBId: existing.id,
+                matchMethod: 'keyword',
+                similarityScore: Math.round(sim * 1000) / 1000,
+                evidence: `⚠️ Potential Overlapping Cases – Coordination Required\n\n[Live Scan] Thematic similarity score: ${(sim * 100).toFixed(1)}%. Both cases share related terminology between ${createdCase.bureau} and ${existing.bureau}. Coordination between bureaus is recommended before independent action.`,
+                reviewDecision: 'pending',
+              });
+            }, 0);
+          }
         }
 
-        // Layer 2: Text / keyword similarity
-        const sim = computeTextSimilarity(createdCase.description, existing.description);
-        if (sim >= 0.25) {
-          addOverlap({
-            caseAId: createdCase.id,
-            caseBId: existing.id,
-            matchMethod: 'keyword',
-            similarityScore: Math.round(sim * 1000) / 1000,
-            evidence: `[Live Scan] Heuristic similarity score: ${(sim * 100).toFixed(1)}%. Both cases share thematic terms between ${createdCase.bureau} and ${existing.bureau}.`,
-            reviewDecision: 'pending',
-          });
-          foundOverlaps++;
-        }
-      }
+        return [createdCase, ...prev];
+      });
 
-      // Add Notification
+      // Add Notification — overlap count comes from the scan above
       const notifId = generateId('NOTIF');
       const newNotif: NotificationItem = {
         id: notifId,
         title: `Case Registered: ${id}`,
-        desc: `${createdCase.institutionName} · ${createdCase.category}${
-          foundOverlaps > 0 ? ` (${foundOverlaps} potential cross-bureau overlap(s) flagged!)` : ''
-        }`,
+        desc: `${createdCase.institutionName} · ${createdCase.category} — Overlap scan running…`,
         time: 'Just now',
         read: false,
-        type: foundOverlaps > 0 ? 'overlap' : 'success',
+        type: 'success',
         linkCaseId: id,
       };
       setNotifications(prev => [newNotif, ...prev]);
 
       return createdCase;
     },
-    [cases, currentUser, addOverlap]
+    [currentUser, addOverlap]
   );
 
   const updateOverlap = useCallback((id: string, patch: Partial<OverlapCandidate>) => {

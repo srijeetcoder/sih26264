@@ -317,7 +317,7 @@ export function LodgeComplaintModal({ isOpen, onClose, onCaseCreated }: LodgeCom
                 <textarea
                   className="form-control"
                   rows={4}
-                  placeholder="Detail the alleged irregularity, dates of occurrence, affected departments, student numbers, or statutory provisions breached..."
+                  placeholder="Detail the alleged irregularity, dates of occurrence, affected departments, student numbers, statutory provisions breached, or AY 2026-27 specific issues..."
                   value={description}
                   onChange={e => setDescription(e.target.value)}
                   required

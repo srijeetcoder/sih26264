@@ -4,9 +4,9 @@
 import type { Case, OverlapCandidate, User } from '../types';
 import { SAMPLE_CASES, SEED_OVERLAPS, DEFAULT_USERS } from '../data/sampleData';
 
-const CASES_KEY = 'onedesk_cases_v2';
-const OVERLAPS_KEY = 'onedesk_overlaps_v2';
-const USER_KEY = 'onedesk_auth_user_v2';
+const CASES_KEY = 'onedesk_cases_v3';
+const OVERLAPS_KEY = 'onedesk_overlaps_v3';
+const USER_KEY = 'onedesk_auth_user_v3';
 
 function safeRead<T>(key: string, fallback: T): T {
   try {
