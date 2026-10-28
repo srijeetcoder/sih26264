@@ -179,7 +179,12 @@ export function Topbar({ currentView, onNavigate, onOpenLodgeModal }: TopbarProp
       {/* Right: Actions, Notifications, Role & User Menu */}
       <div className="topbar-right">
         {/* + Lodge Complaint Button */}
-        <button className="btn btn-primary btn-sm topbar-action-btn" onClick={onOpenLodgeModal}>
+        <button
+          className="btn btn-primary btn-sm topbar-action-btn"
+          onClick={onOpenLodgeModal}
+          id="topbar-lodge-complaint-btn"
+          title="Lodge New Regulatory Complaint (Mail Compose)"
+        >
           <PlusCircle size={15} />
           <span>Lodge Complaint</span>
         </button>

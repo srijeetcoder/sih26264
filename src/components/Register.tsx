@@ -5,7 +5,6 @@ import {
   Filter,
   ArrowUpDown,
   FileX,
-  PlusCircle,
   Eye,
   X,
   ExternalLink,
@@ -44,10 +43,9 @@ type SortKey = 'receivedDate' | 'expectedDisposalDate' | 'id' | 'institutionName
 
 interface RegisterProps {
   onNavigate: (view: ViewName, payload?: unknown) => void;
-  onOpenLodgeModal?: () => void;
 }
 
-export function Register({ onNavigate, onOpenLodgeModal }: RegisterProps) {
+export function Register({ onNavigate }: RegisterProps) {
   const { cases, overlaps } = useApp();
 
   const [search, setSearch] = useState('');
@@ -147,11 +145,6 @@ export function Register({ onNavigate, onOpenLodgeModal }: RegisterProps) {
           <button className="btn btn-secondary btn-sm" onClick={handleExportFiltered} title="Export filtered rows to CSV">
             <Download size={14} /> Export CSV
           </button>
-          {onOpenLodgeModal && (
-            <button className="btn btn-primary btn-sm" onClick={onOpenLodgeModal}>
-              <PlusCircle size={14} /> Lodge Complaint
-            </button>
-          )}
         </div>
       </div>
 

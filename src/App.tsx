@@ -63,10 +63,7 @@ function AppContent() {
         )}
 
         {currentView === 'register' && (
-          <Register
-            onNavigate={handleNavigate}
-            onOpenLodgeModal={() => setIsLodgeModalOpen(true)}
-          />
+          <Register onNavigate={handleNavigate} />
         )}
 
         {currentView === 'institutions' && (
