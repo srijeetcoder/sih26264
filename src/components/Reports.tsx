@@ -16,6 +16,8 @@ import type { Bureau } from '../types';
 import Papa from 'papaparse';
 
 const BUREAUS: Bureau[] = [
+  'Regulation Bureau (RB)',
+  'Public Grievance Redressal Cell (PGRC)',
   'Approval Bureau',
   'Anti-Ragging Cell',
   'Grievance Cell',

@@ -104,7 +104,7 @@ export function CaseDetail({ caseId, onNavigate }: CaseDetailProps) {
       {/* Header Profile Card */}
       <div className="card" style={{ marginBottom: 20 }}>
         <div className="profile-header">
-          <div className="profile-avatar">{caseItem.id.replace('CASE-2024-', '')}</div>
+          <div className="profile-avatar">{caseItem.id.replace(/^CASE-\d{4}-/, '')}</div>
           <div className="profile-info">
             <div className="profile-title-row">
               <span className="profile-name">{caseItem.id}</span>
@@ -146,8 +146,8 @@ export function CaseDetail({ caseId, onNavigate }: CaseDetailProps) {
           </div>
           <div className="overlap-callout-body">
             <div className="overlap-callout-title">
-              <span>Cross-Bureau Overlap Flagged ({relatedOverlaps.length} connection)</span>
-              <span className="badge badge-alert">Attention Required</span>
+              <span>Potential Overlapping Cases – Coordination Required ({relatedOverlaps.length} connection)</span>
+              <span className="badge badge-alert">Coordination Required</span>
             </div>
             <p className="overlap-callout-desc">
               This case has been matched with other AICTE complaints concerning{' '}

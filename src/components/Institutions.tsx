@@ -240,7 +240,7 @@ export function InstitutionProfile({ institutionId, onNavigate }: InstitutionPro
               <span className="badge badge-disposed">AICTE Permanent ID: {institutionId}</span>
               {activeBureaus.length >= 2 && (
                 <span className="badge badge-alert">
-                  Cross-Bureau Exposure ({activeBureaus.length} Bureaus)
+                  ⚠️ Potential Overlapping Cases – Coordination Required ({activeBureaus.length} Bureaus)
                 </span>
               )}
             </div>

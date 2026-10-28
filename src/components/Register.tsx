@@ -27,6 +27,8 @@ import type { ViewName } from './Sidebar';
 import Papa from 'papaparse';
 
 const BUREAUS: Bureau[] = [
+  'Regulation Bureau (RB)',
+  'Public Grievance Redressal Cell (PGRC)',
   'Approval Bureau',
   'Anti-Ragging Cell',
   'Grievance Cell',
@@ -46,7 +48,7 @@ interface RegisterProps {
 }
 
 export function Register({ onNavigate, onOpenLodgeModal }: RegisterProps) {
-  const { cases } = useApp();
+  const { cases, overlaps } = useApp();
 
   const [search, setSearch] = useState('');
   const [bureauFilter, setBureauFilter] = useState<Bureau | ''>('');
@@ -300,7 +302,14 @@ export function Register({ onNavigate, onOpenLodgeModal }: RegisterProps) {
                       onClick={() => setDrawerCase(c)}
                     >
                       <td>
-                        <span className="case-id-badge">{c.id}</span>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+                          <span className="case-id-badge">{c.id}</span>
+                          {overlaps.some(o => (o.caseAId === c.id || o.caseBId === c.id) && o.reviewDecision === 'pending') && (
+                            <span className="badge badge-alert" style={{ fontSize: '0.65rem', padding: '1px 5px', width: 'fit-content' }} title="Potential Overlapping Cases – Coordination Required">
+                              ⚠️ Coordination Required
+                            </span>
+                          )}
+                        </div>
                       </td>
                       <td>
                         <div className="table-inst-group">

@@ -30,6 +30,8 @@ interface OverviewProps {
 }
 
 const ALL_BUREAUS: Bureau[] = [
+  'Regulation Bureau (RB)',
+  'Public Grievance Redressal Cell (PGRC)',
   'Approval Bureau',
   'Anti-Ragging Cell',
   'Grievance Cell',
@@ -214,7 +216,7 @@ export function Overview({ onNavigate }: OverviewProps) {
               <span className="card-title">Complaint Intake Velocity</span>
               <p className="card-subtitle">Cumulative case registrations over current evaluation cycle</p>
             </div>
-            <div className="reporting-tag">AY 2024-25</div>
+            <div className="reporting-tag">AY 2026-27</div>
           </div>
 
           <div className="card-body">

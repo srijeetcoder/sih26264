@@ -14,6 +14,8 @@ import type { Bureau, CasePriority } from '../types';
 import { format, addDays } from 'date-fns';
 
 const BUREAUS: Bureau[] = [
+  'Regulation Bureau (RB)',
+  'Public Grievance Redressal Cell (PGRC)',
   'Approval Bureau',
   'Anti-Ragging Cell',
   'Grievance Cell',

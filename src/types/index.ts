@@ -6,6 +6,8 @@ export type CaseStatus = 'pending' | 'in-process' | 'disposed' | 'overdue';
 export type CasePriority = 'urgent' | 'high' | 'medium' | 'low';
 
 export type Bureau =
+  | 'Regulation Bureau (RB)'
+  | 'Public Grievance Redressal Cell (PGRC)'
   | 'Approval Bureau'
   | 'Anti-Ragging Cell'
   | 'Grievance Cell'

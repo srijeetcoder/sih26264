@@ -140,7 +140,7 @@ export function OverlapWatch({ onNavigate }: OverviewProps) {
             caseAId: a.id,
             caseBId: b.id,
             matchMethod: 'exact-id',
-            evidence: `Both cases share the same institution ID (${a.institutionId}) but are handled by different bureaus: "${a.bureau}" and "${b.bureau}".`,
+            evidence: `⚠️ Potential Overlapping Cases – Coordination Required\n\nBoth cases share the same institution ID (${a.institutionId}) but are handled by different bureaus: "${a.bureau}" and "${b.bureau}". Coordination between bureaus is required to prevent parallel or conflicting actions.`,
             reviewDecision: 'pending',
           });
           continue;
@@ -528,6 +528,11 @@ export function OverlapWatch({ onNavigate }: OverviewProps) {
                         {method.icon} {method.label}
                       </span>
                       <span className={`badge ${reviewCfg.cls}`}>{reviewCfg.label}</span>
+                      {overlap.reviewDecision === 'pending' && (
+                        <span className="badge badge-alert" style={{ fontWeight: 700 }}>
+                          Potential Overlapping Cases – Coordination Required
+                        </span>
+                      )}
                     </div>
                   </div>
 

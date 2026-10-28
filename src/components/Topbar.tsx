@@ -203,7 +203,7 @@ export function Topbar({ currentView, onNavigate, onOpenLodgeModal }: TopbarProp
 
         {/* Reporting Period */}
         <div className="reporting-period-tag" title="AICTE Regulatory Window">
-          AY 2024-25
+          AY 2026-27
         </div>
 
         {/* Notifications Popover */}
