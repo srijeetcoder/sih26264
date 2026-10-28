@@ -12,6 +12,7 @@ import {
   Menu,
   ShieldCheck,
   ChevronRight,
+  type LucideIcon,
 } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 
@@ -29,7 +30,7 @@ export type ViewName =
 interface NavItem {
   view: ViewName;
   label: string;
-  icon: React.ComponentType<{ size?: number; className?: string }>;
+  icon: LucideIcon;
   section?: string;
   badgeCount?: (casesCount: number, overlapsCount: number) => number | null;
 }

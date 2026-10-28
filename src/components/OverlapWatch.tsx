@@ -98,12 +98,9 @@ interface OverviewProps {
 export function OverlapWatch({ onNavigate }: OverviewProps) {
   const { cases, overlaps, addOverlap, reviewOverlap, appendAuditEvent, currentUser } = useApp();
 
-  const [aiStatus, setAiStatus] = useState<AIStatusInfo>({
-    available: true,
-    provider: 'vercel',
-    model: 'nomic-semantic-vectors',
-  });
-  const [aiChecking, setAiChecking] = useState(false);
+  const [ollamaAvailable, setOllamaAvailable] = useState(false);
+  const [ollamaStatus, setOllamaStatus] = useState<{ viaProxy: boolean; model: string } | null>(null);
+  const [ollamaChecking, setOllamaChecking] = useState(false);
   const [semanticRunning, setSemanticRunning] = useState(false);
   const [semanticProgress, setSemanticProgress] = useState('');
   const [semanticError, setSemanticError] = useState('');
@@ -112,14 +109,20 @@ export function OverlapWatch({ onNavigate }: OverviewProps) {
   const [reviewState, setReviewState] = useState<Record<string, { note: string; reviewer: string }>>({});
 
   // Check AI on mount
-  const checkAI = useCallback(async () => {
-    setAiChecking(true);
+  const checkOllama = useCallback(async () => {
+    setOllamaChecking(true);
     const status = await checkAIAvailability();
-    setAiStatus(status);
-    setAiChecking(false);
+    const available = status.available && status.provider !== 'browser';
+    setOllamaAvailable(available);
+    setOllamaStatus(
+      available
+        ? { viaProxy: status.provider === 'vercel', model: status.model }
+        : null
+    );
+    setOllamaChecking(false);
   }, []);
 
-  useEffect(() => { void checkAI(); }, [checkAI]);
+  useEffect(() => { void checkOllama(); }, [checkOllama]);
 
   // ── Layer 1 + 2: Deterministic matching ──────────────────────────────────
   const runDeterministicMatching = useCallback(() => {

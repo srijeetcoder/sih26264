@@ -11,7 +11,7 @@ import {
 } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 import { SAMPLE_INSTITUTIONS } from '../data/sampleData';
-import { statusLabel, statusColor, formatDate, casesToCsvRows } from '../utils/helpers';
+import { formatDate, casesToCsvRows } from '../utils/helpers';
 import type { Bureau } from '../types';
 import Papa from 'papaparse';
 
